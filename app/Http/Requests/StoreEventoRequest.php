@@ -20,7 +20,10 @@ class StoreEventoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'Nome' => 'required|string|min:5|max:150' ,
+            'Local' => 'required|string|max;255' ,
+            'Data' => 'required|dateTime| after:now' ,
+            'PrecoIngresso' => 'required|decimal|'
         ];
     }
 }
