@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Eventos extends Model
+class Evento extends Model
 {
+    protected $fillable =['Nome', 'Local' , 'Data', 'PrecoIngresso', 'descricao', 'image'];
 }

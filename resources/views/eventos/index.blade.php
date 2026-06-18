@@ -1,18 +1,19 @@
 @extends('adminlte::page')
 
-@section('title', 'Listagem dos eventos')
-
-@stop
-
-@section('content_header')
-<h1> Eventos feitos </h1>
-@stop
+@define('title','Lista de Eventos')
 
 @section('content')
-<div class="card">
-    <div class="card-body">
 
-    </div>
-</div>
+@vite('resources/css/style.css')
 
-@stop
+<header>
+    <div class="image"><a href="/">Comeback Eventos</a>
+
+ <nav>
+        <a href="{{ route('eventos') }}">Eventos</a>
+        <a href="{{ route('table') }}">Tabela</a>
+    </nav>
+</header>
+
+@endsection
+

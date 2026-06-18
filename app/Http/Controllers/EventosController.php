@@ -2,44 +2,81 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Eventos;
+use App\Models\Evento;
 use App\Http\Requests\StoreEventoRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
 
 class EventosController extends Controller
 {
-    
+
     public function index()
     {
-        
-        $Eventos = Eventos::orderBy('created_at', 'DESC')->get();
-        
-        return view('Eventos.index', compact('Eventos'));
+        $evento = Evento::all();
+        return view('eventos.index', compact('evento'));
     }
 
-    
     public function create()
     {
-        return view('Eventos.create');
+        return view('eventos.create');
     }
 
-    
+    public function ListarEventos()
+    {
+        $eventos = Evento::all();
+        return view ('eventos.eventos', compact('eventos'));
+    }
+
+    public function TabelaEventos()
+    {
+        $eventos = Evento::paginate(4);
+        return view('eventos.tabela', compact('eventos'));
+    }
+
+  
     public function store(StoreEventoRequest $request)
     {
-        
-        $data = $request->validated();
+        $path = $request->file('image')->store('eventos', 'public');
 
-        
-        if ($request->hasFile('imagem')) {
-            $data['imagem'] = $request->file('imagem')->store('Eventos', 'public');
-        }
+        Evento::create([
+            'Nome' => $request->Nome,
+            'Local' => $request->Local,
+            'Data' => $request->Data,
+            'PrecoIngresso' => $request -> PrecoIngresso,
+            'image' => $path,
+        ]);
 
-        
-        Eventos::create($data);
+        return redirect() ->route('eventos');
+    }
 
-       
-        return redirect()->route('Eventos.index')->with('parabéns', 'Evento cadastrado com absoluto sucesso!');
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }
