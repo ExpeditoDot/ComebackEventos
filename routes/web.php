@@ -4,30 +4,28 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventosController;
 use Illuminate\Support\Facades\Route;
 
-// 1. Tela Inicial padrão (Com os botões de Login e Cadastro no topo)
+// 1. ROTA PÚBLICA (Tela de boas-vindas do projeto)
 Route::get('/', function () {
-    return view('welcome'); // Carrega a tela com o logo do Laravel e os botões
+    return view('welcome');
 });
 
-// 2. Rota do Dashboard (Quando faz Login/Cadastro, o Breeze joga para cá)
-// Mudamos para que ela chame direto a sua tela preta do AdminLTE!
-Route::get('/dashboard', [EventosController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-// 3. Outras rotas do seu sistema protegidas por Login
-Route::middleware(['auth'])->group(function () {
-    Route::get('/create', [EventosController::class, 'eventos.create'])->name('eventos.create');
-    Route::get('/eventos', [EventosController::class, 'ListarEventos'])->name('eventos');
-    Route::get('/tabela', [EventosController::class, 'TabelaEventos'])->name('table');
+// 2. ROTAS PROTEGIDAS (Só quem está logado consegue acessar)
+Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Rotas de perfil automáticas do Breeze
+    // Rota padrão pós-login: Redireciona o usuário direto para a lista de eventos
+    Route::get('/dashboard', [EventosController::class, 'index'])->name('dashboard');
+    
+    // Rota alternativa de segurança (Caso o Breeze force o redirecionamento antigo do admin)
+    Route::get('/admin/dashboard', [EventosController::class, 'index']);
+
+    // CRUD COMPLETO DE EVENTOS (Cria rotas para index, create, store, edit, update e destroy)
+    Route::resource('eventos', EventosController::class);
+
+    // Rotas de perfil de usuário nativas do Breeze (Podem continuar aqui)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// 4. Carrega as rotas de autenticação do Breeze (login, register, logout)
+// 3. ARQUIVOS DE AUTENTICAÇÃO (Obrigatório para carregar rotas de login/registro do Breeze)
 require __DIR__.'/auth.php';
-
-

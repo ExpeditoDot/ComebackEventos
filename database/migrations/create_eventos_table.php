@@ -11,16 +11,18 @@ return new class extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->string("Nome"); 
-            $table->string("Local");
-            $table->dateTime("Data");
-            $table->decimal("PrecoIngresso", 10, 2);
-            $table->text("descricao");
-            $table->string('image')->nullable();
+            $table->string('nome');
+            $table->string('local');
+            $table->dateTime('data');
+            
+            // --- ADICIONE ESTAS 3 LINHAS NOVAS AQUI EMBAIXO ---
+            $table->decimal('preco_ingresso', 8, 2)->nullable(); // Guarda o preço (ex: 99.90)
+            $table->text('descricao')->nullable();               // Guarda textos longos da descrição
+            $table->string('image')->nullable();                 // Guarda o caminho da foto anexada
+            
             $table->timestamps();
         });
     }
-
 
     public function down(): void
     {
