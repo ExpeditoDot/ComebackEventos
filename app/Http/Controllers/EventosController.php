@@ -24,7 +24,7 @@ class EventosController extends Controller
         $eventos = Evento::paginate(5);
         
         // Retorna a sua view específica chamada 'tabela.blade.php'
-        return view('tabela', compact('eventos'));
+        return view('eventos.tabela', compact('eventos'));
     }
 
    

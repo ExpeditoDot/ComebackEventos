@@ -31,40 +31,40 @@
                 <form method="POST" action="{{ route('eventos.update', $evento->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                   
-                    <div class="form-group">
-                        <label for="nome">Nome do Evento</label>
-                        <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome', $evento->nome) }}">
-                        @error('nome')
+                    
+                   <div class="form-group">
+                        <label for="Nome">Nome do Evento</label>
+                        <input type="text" name="Nome" id="Nome" class="form-control @error('Nome') is-invalid @enderror" value="{{ old('Nome', $evento->Nome) }}">
+                        @error('Nome')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-group">
-                        <label for="local">Local do Evento</label>
-                        <input type="text" name="local" id="local" class="form-control @error('local') is-invalid @enderror" value="{{ old('local', $evento->local) }}">
-                        @error('local')
+                        <label for="Local">Local do Evento</label>
+                        <input type="text" name="Local" id="Local" class="form-control @error('Local') is-invalid @enderror" value="{{ old('Local', $evento->Local) }}">
+                        @error('Local')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label for="data">Data do Evento</label>
-                        <input type="datetime-local" name="data" id="data" class="form-control @error('data') is-invalid @enderror" value="{{ old('data', $evento->data ? date('Y-m-d\TH:i', strtotime($evento->data)) : '') }}">
-                        @error('data')
+                     <div class="form-group">
+                        <label for="Data">Data do Evento</label>
+                        <input type="datetime-local" name="Data" id="Data" class="form-control @error('Data') is-invalid @enderror" value="{{ old('Data', $evento->Data ? date('Y-m-d\TH:i', strtotime($evento->Data)) : '') }}">
+                        @error('Data')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label for="preco_ingresso">Preço do Ingresso</label>
-                        <input type="number" step="0.01" name="preco_ingresso" id="preco_ingresso" class="form-control @error('preco_ingresso') is-invalid @enderror" value="{{ old('preco_ingresso', $evento->preco_ingresso) }}">
-                        @error('preco_ingresso')
+                          <div class="form-group">
+                        <label for="PrecoIngresso">Preço do Ingresso</label>
+                        <input type="number" step="0.01" name="PrecoIngresso" id="PrecoIngresso" class="form-control @error('PrecoIngresso') is-invalid @enderror" value="{{ old('PrecoIngresso', $evento->PrecoIngresso) }}">
+                        @error('PrecoIngresso')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
 
-                    <div class="form-group">
+                       <div class="form-group">
                         <label for="descricao">Descrição do Evento</label>
                         <textarea name="descricao" id="descricao" rows="3" class="form-control @error('descricao') is-invalid @enderror">{{ old('descricao', $evento->descricao) }}</textarea>
                         @error('descricao')
@@ -72,6 +72,7 @@
                         @enderror
                     </div>
 
+                   
                     <div class="form-group">
                         <label for="image">Imagem do evento (Deixe em branco para manter a atual)</label>
                         @if($evento->image)
