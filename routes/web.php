@@ -4,7 +4,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventosController;
 use Illuminate\Support\Facades\Route;
 
+
 // 1. ROTA PÚBLICA (Tela de boas-vindas do projeto)
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -27,5 +30,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 // 3. ARQUIVOS DE AUTENTICAÇÃO (Obrigatório para carregar rotas de login/registro do Breeze)
 require __DIR__.'/auth.php';
+
+require __DIR__.'/auth.php';
+Route::get('/', [EventosController::class, 'index']);
+Route::get('/create' , [EventosController::class, 'eventos.create']);
+Route::get('/eventos' , [EventosController::class, 'ListarEventos'])->name('eventos');
+Route::get('/tabela' , [EventosController::class, 'TabelaEventos'])->name('table');
+Route::get('/home', [EventosController::class, 'index']);
+
+//Auth::routes();
+

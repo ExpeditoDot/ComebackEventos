@@ -299,11 +299,7 @@ return [
     */
 
     'menu' => [
-       [
-        'text' => 'Dashboard',
-        'url'  => 'admin/dashboard',
-        'icon' => 'fas fa-fw fa-tachometer-alt',
-    ],
+       
     ['header' => 'GERENCIAMENTO'],
     [
         'text'        => 'Eventos',
@@ -311,6 +307,11 @@ return [
         'icon'        => 'fas fa-fw fa-calendar-alt',
         'label'       => 'CRUD',
         'label_color' => 'info',
+    ],
+    [
+        'text' => 'Tabela',
+        'url'  => 'tabela',
+        'icon' => 'fas fa-fw fa-tachometer-alt',
     ],
     ],
 
