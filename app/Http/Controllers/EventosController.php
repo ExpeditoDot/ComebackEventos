@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Evento;
 use App\Http\Requests\StoreEventoRequest;
+use App\Http\Requests\UpdateEventoRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventosController extends Controller
 {
@@ -47,36 +49,31 @@ class EventosController extends Controller
 
         return redirect() ->route('eventos');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Evento $evento)    
     {
-        //
+        return view ('eventos.edit', compact('evento'));
+    }
+        public function update(UpdateEventoRequest $request, Evento $evento)
+    {
+        $evento-> update($request-> only(['Nome','Local','Data','PrecoIngresso', 'descricao']));
+        if ($request->hasFile('image')) {
+            if ($evento->image) {
+                storage::disk('public')->delete($evento->image);
+            }
+            $evento->image = $request->file('image')->store('eventos','public');
+        } else {
+            $evento->image = $evento->image;
+        }
+        $evento->update(["image" => $evento->image]);
+        return redirect()->route('eventos');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Evento $evento)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if ($evento->image) {
+            storage::disk('public')->delete($evento->image);
+        }
+        $evento->delete();
+        return redirect()->route('eventos');
     }
 }
