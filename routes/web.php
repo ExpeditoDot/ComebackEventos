@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [EventosController::class, 'index'])->name('dashboard');
     Route::get('/admin/dashboard', [EventosController::class, 'index']);
 
+    Route::get('/eventos-tabela', [EventosController::class, 'tabela'])->name('eventos.tabela');
     // Todas as rotas do CRUD de Eventos
     Route::resource('eventos', EventosController::class);
 

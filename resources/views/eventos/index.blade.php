@@ -19,11 +19,10 @@
                 <div><strong>Monitoramento:</strong> Atualizações em tempo real dos status.</div>
             </div>
 
-            {{-- Links com suas classes customizadas de botões --}}
-            <a href="{{ route('eventos') }}" class="btn-principal d-inline-block text-center text-decoration-none">
+           <a href="{{ route('eventos.index') }}" class="btn-principal d-inline-block text-center text-decoration-none">
                 <i class="fas fa-calendar-alt mr-1"></i> Ir para Eventos
             </a>
-            <a href="{{ route('table') }}" class="btn-topo d-inline-block text-center text-decoration-none ml-2">
+            <a href="{{ route('eventos.tabela') }}" class="btn-topo d-inline-block text-center text-decoration-none ml-2">
                 <i class="fas fa-table mr-1"></i> Ver Tabela
             </a>
         </div>
@@ -44,5 +43,4 @@
 
         </div>
     </div>
-    <p>aueifbqetofqgtyqvo7qfgtwoufhwirugniwofmhwiwniygwomifhwiofgywigfryfq</p>
-@endsection
+    

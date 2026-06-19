@@ -22,7 +22,7 @@ class UpdateEventoRequest extends FormRequest
         return [
             'Nome' => 'required|string|min:5|max:150' ,
             'Local' => 'required|string|min:5|max:255' ,
-            'Data' => 'required|dateTime| after:now' ,
+            'Data' => 'required|date| after:now' ,
             'PrecoIngresso' => 'required|numeric|min:0|max:9999.99' ,
             'descricao' =>'required|string|min:0|max:65000' ,
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',

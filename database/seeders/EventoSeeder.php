@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Eventos;
+use App\Models\Evento;
 use Illuminate\Database\Seeder;
 
 class EventoSeeder extends Seeder
@@ -11,7 +11,7 @@ class EventoSeeder extends Seeder
 
     public function run(): void
     {
-        Eventos::create([
+        Evento::create([
             'Nome' => 'Festival de Rock de Verão',
             'Local' => 'Estádio Municipal',
             'Data' => '2026-07-15 18:00:00',
@@ -20,7 +20,7 @@ class EventoSeeder extends Seeder
             'image' => null,
         ]);
 
-        Eventos::create([
+        Evento::create([
             'Nome' => 'Workshop de Programação Web com Laravel',
             'Local' => 'Centro Tecnológico Alfa',
             'Data' => '2026-08-20 09:00:00',
@@ -29,7 +29,7 @@ class EventoSeeder extends Seeder
             'image' => null,
         ]);
 
-        Eventos::create([
+        Evento::create([
             'Nome' => 'Peça de Teatro: A Comédia da Vida',
             'Local' => 'Teatro Central',
             'Data' => '2026-06-30 20:30:00',
@@ -38,7 +38,7 @@ class EventoSeeder extends Seeder
             'image' => null,
         ]);
 
-        Eventos::create([
+        Evento::create([
             'Nome' => 'Maratona da Cidade 2026',
             'Local' => 'Avenida Beira Mar (Largada)',
             'Data' => '2026-09-05 06:00:00',
@@ -47,7 +47,7 @@ class EventoSeeder extends Seeder
             'image' => null, // Exemplo usando o ->nullable() que você definiu
         ]);
 
-        Eventos::create([
+        Evento::create([
             'Nome' => 'Feira Gastronômica Internacional',
             'Local' => 'Parque das Nações',
             'Data' => '2026-10-12 12:00:00',

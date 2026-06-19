@@ -10,10 +10,10 @@ return new class extends Migration
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('local');
-            $table->dateTime('data');
-            $table->decimal('preco_ingresso', 10, 2)->nullable();
+            $table->string('Nome');
+            $table->string('Local');
+            $table->dateTime('Data');
+            $table->decimal('PrecoIngresso', 10, 2)->nullable();
             $table->text('descricao')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

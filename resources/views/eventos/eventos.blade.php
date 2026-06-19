@@ -9,7 +9,7 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center pr-2">
         <h1 class="text-white">Gerenciar Eventos</h1>
-        <a href="#" class="btn btn-danger font-weight-bold">
+          <a href="{{ route('eventos.create') }}" class="btn btn-danger font-weight-bold">
             <i class="fas fa-plus-circle mr-1"></i> Novo Evento
         </a>
     </div>
@@ -17,83 +17,68 @@
 
 @section('content')
     <div class="eventos-bx">
+        
+         @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <i class="icon fas fa-check-circle mr-1"></i> {{ session('success') }}
+            </div>
+        @endif
+
         <div class="lista-eventos">
             
-            {{-- Card 1 --}}
-            <div class="evento-card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT51BSZFV8GRWhwYjF4XqVtMlRqg082L37H6g&s" class="evento-card-img" alt="Banner">
-                
-                <div class="evento-card-body">
-                    <h4 class="text-white font-weight-bold">Show de Rock Comeback</h4>
-                    <span class="badge badge-success mb-2">Confirmado</span>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-calendar-day mr-1"></i> 25/11/2026
-                    </p>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-map-marker-alt mr-1"></i> Arena Central
-                    </p>
-                </div>
+           @forelse ($eventos as $evento)
+                <div class="evento-card">
+                    
+                  @if($evento->image)
+                        <img src="{{ asset('storage/' . $evento->image) }}" class="evento-card-img" alt="Banner do Evento">
+                    @else
+                         <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" class="evento-card-img" alt="Banner Padrão">
+                    @endif
+                    
+                    <div class="evento-card-body">
+                        <h4 class="text-white font-weight-bold">{{ $evento->Nome }}</h4>
+                        
+                       <span class="badge badge-danger mb-2">R$ {{ number_format($evento->PrecoIngresso, 2, ',', '.') }}</span>
+                        
+                              <p class="text-xs text-white-50">
+                            <i class="fas fa-calendar-day mr-1"></i> 
+                            {{ date('d/m/Y H:i', strtotime($evento->Data)) }}
+                        </p>
+                        
+                      <p class="text-xs text-white-50">
+                            <i class="fas fa-map-marker-alt mr-1"></i> {{ $evento->Local }}
+                        </p>
+                    </div>
 
-                <div class="w-100 d-flex justify-content-between">
-                    <a href="#" class="btn btn-sm btn-outline-light w-50 mr-1">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <button class="btn btn-sm btn-danger w-50">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
-                </div>
-            </div>
+                   <div class="w-100 d-flex justify-content-between">
+                        <a href="{{ route('eventos.edit', $evento->id) }}" class="btn btn-sm btn-outline-light w-50 mr-1">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        
+                        <button type="button" class="btn btn-sm btn-danger w-50" onclick="if(confirm('Tem certeza que deseja remover este evento?')) { document.getElementById('form-delete-{{ $evento->id }}').submit(); }">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
 
-            {{-- Card 2 --}}
-            <div class="evento-card">
-                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=2070&auto=format&fit=crop" class="evento-card-img" alt="Banner">
-                
-                <div class="evento-card-body">
-                    <h4 class="text-white font-weight-bold">Conferência Tech 2026</h4>
-                    <span class="badge badge-warning mb-2">Pendente</span>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-calendar-day mr-1"></i> 12/12/2026
-                    </p>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-map-marker-alt mr-1"></i> Auditório Alfa
-                    </p>
+                         <form id="form-delete-{{ $evento->id }}" action="{{ route('eventos.destroy', $evento->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                    </div>
                 </div>
-
-                <div class="w-100 d-flex justify-content-between">
-                    <a href="#" class="btn btn-sm btn-outline-light w-50 mr-1">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <button class="btn btn-sm btn-danger w-50">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
+            @empty
+               <div class="col-12 text-center py-5">
+                    <p class="text-muted"><i class="fas fa-calendar-times fa-3x mb-3 d-block"></i> Nenhum evento cadastrado no momento.</p>
                 </div>
-            </div>
-
-            {{-- Card 3 --}}
-            <div class="evento-card">
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" class="evento-card-img" alt="Banner">
-                
-                <div class="evento-card-body">
-                    <h4 class="text-white font-weight-bold">Festa de Fim de Ano</h4>
-                    <span class="badge badge-secondary mb-2">Planejado</span>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-calendar-day mr-1"></i> 31/12/2026
-                    </p>
-                    <p class="text-xs text-white-50">
-                        <i class="fas fa-map-marker-alt mr-1"></i> Salão Nobre
-                    </p>
-                </div>
-
-                <div class="w-100 d-flex justify-content-between">
-                    <a href="#" class="btn btn-sm btn-outline-light w-50 mr-1">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <button class="btn btn-sm btn-danger w-50">
-                        <i class="fas fa-trash"></i> Excluir
-                    </button>
-                </div>
-            </div>
+            @endforelse
 
         </div>
+
+    <div class="d-flex justify-content-center mt-4 bg-dark p-2 rounded">
+            {{ $eventos->links('pagination::bootstrap-4') }}
+        </div>
+
     </div>
 @endsection
