@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventosController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,4 +25,4 @@ Route::get('/eventos' , [EventosController::class, 'ListarEventos'])->name('even
 Route::get('/tabela' , [EventosController::class, 'TabelaEventos'])->name('table');
 Route::get('/home', [EventosController::class, 'index']);
 
-Auth::routes();
+//Auth::routes();
