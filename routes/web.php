@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventosController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventosController;
 
 // 1. Tela Inicial padrão (Com os botões de Login e Cadastro no topo)
 Route::get('/', function () {
@@ -27,7 +28,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// 4. Carrega as rotas de autenticação do Breeze (login, register, logout)
 require __DIR__.'/auth.php';
+Route::get('/', [EventosController::class, 'index']);
+Route::get('/create' , [EventosController::class, 'eventos.create']);
+Route::get('/eventos' , [EventosController::class, 'ListarEventos'])->name('eventos');
+Route::get('/tabela' , [EventosController::class, 'TabelaEventos'])->name('table');
+Route::get('/home', [EventosController::class, 'index']);
 
-
+//Auth::routes();
