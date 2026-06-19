@@ -1,8 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Cadastro evento')
-
-@section('content')
+@section('title','editar')
 
 @section('css')
     @vite('resources/css/style.css')
@@ -13,14 +11,15 @@
         <div class="card card-sucess">
             <div class="card-header">
                 <h3 class="card-title">
-                    Cadastro do Evento
+                    Editar Evento
                 </h3>
             </div>
 
             <div class="card-body">
 
-            <form method="POST" action="{{ route('eventos.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('eventos.update', $evento->id) }}" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                
                 <div class="form-group">
                     <label>Nome do Evento solicitado</label>
