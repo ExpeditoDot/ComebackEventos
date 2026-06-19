@@ -33,7 +33,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventosController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EventosController;
+
 
 // 1. Tela Inicial padrão (Com os botões de Login e Cadastro no topo)
 Route::get('/', function () {
