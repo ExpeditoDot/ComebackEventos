@@ -4,42 +4,27 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventosController;
 use Illuminate\Support\Facades\Route;
 
-
-// 1. ROTA PÚBLICA (Tela de boas-vindas do projeto)
-
-
+// 1. ROTA PÚBLICA (Fora do grupo de autenticação)
+// Sempre que alguém entrar no site puro, verá a tela com "Logar" e "Cadastrar"
 Route::get('/', function () {
     return view('welcome');
 });
 
-// 2. ROTAS PROTEGIDAS (Só quem está logado consegue acessar)
+// 2. GRUPO DE ROTAS PROTEGIDAS (Só acessa quem clicar em Logar e colocar a senha)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Rota padrão pós-login: Redireciona o usuário direto para a lista de eventos
+    // Dashboard do AdminLTE com a lista de eventos
     Route::get('/dashboard', [EventosController::class, 'index'])->name('dashboard');
-    
-    // Rota alternativa de segurança (Caso o Breeze force o redirecionamento antigo do admin)
     Route::get('/admin/dashboard', [EventosController::class, 'index']);
 
-    // CRUD COMPLETO DE EVENTOS (Cria rotas para index, create, store, edit, update e destroy)
+    // Todas as rotas do CRUD de Eventos
     Route::resource('eventos', EventosController::class);
 
-    // Rotas de perfil de usuário nativas do Breeze (Podem continuar aqui)
+    // Rotas de perfil do Laravel Breeze
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-// 3. ARQUIVOS DE AUTENTICAÇÃO (Obrigatório para carregar rotas de login/registro do Breeze)
+// 3. Autenticação nativa do Breeze
 require __DIR__.'/auth.php';
-
-require __DIR__.'/auth.php';
-Route::get('/', [EventosController::class, 'index']);
-Route::get('/create' , [EventosController::class, 'eventos.create']);
-Route::get('/eventos' , [EventosController::class, 'ListarEventos'])->name('eventos');
-Route::get('/tabela' , [EventosController::class, 'TabelaEventos'])->name('table');
-Route::get('/home', [EventosController::class, 'index']);
-
-//Auth::routes();
-

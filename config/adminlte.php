@@ -303,10 +303,10 @@ return [
     ['header' => 'GERENCIAMENTO'],
     [
         'text'        => 'Eventos',
-        'url'         => 'eventos',
-        'icon'        => 'fas fa-fw fa-calendar-alt',
-        'label'       => 'CRUD',
-        'label_color' => 'info',
+            'route'       => 'dashboard', // <-- Trocamos 'url' por 'route' apontando para o seu dashboard
+            'icon'        => 'fas fa-fw fa-calendar-alt',
+            'label'       => 'CRUD',
+            'label_color' => 'info',
     ],
     [
         'text' => 'Tabela',

@@ -9,7 +9,6 @@ class Evento extends Model
 {
     use HasFactory;
 
-    // Ajustado para letras minúsculas e adicionados os novos campos (descrição e imagem)
     protected $fillable = [
         'nome',
         'local',

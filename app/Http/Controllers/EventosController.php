@@ -34,18 +34,18 @@ class EventosController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação obrigatória dos campos conforme exigido nos critérios do trabalho
+        // Validação obrigatória dos campos ajustada para as chaves minúsculas do formulário
         $request->validate([
-        'nome'            => 'required|min:3',
-        'local'           => 'required',
-        'data'            => 'required',
-        'preco_ingresso'  => 'nullable|numeric',
-        'descricao'       => 'nullable',
-        'image'           => 'nullable|image|max:2048', // Validação da imagem
+            'nome'            => 'required|min:3',
+            'local'           => 'required',
+            'data'            => 'required',
+            'preco_ingresso'  => 'nullable|numeric',
+            'descricao'       => 'nullable',
+            'image'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
         ], [
             // Mensagens personalizadas em português para a validação
             'nome.required'  => 'O campo nome do evento é obrigatório.',
-            'nome.min'       => 'O nome do evento deve tener pelo menos 3 caracteres.',
+            'nome.min'       => 'O nome do evento deve ter pelo menos 3 caracteres.',
             'local.required' => 'O local do evento é obrigatório.',
             'data.required'  => 'A data do evento é obrigatória.',
             'preco_ingresso.numeric' => 'O preço deve ser um valor numérico válido.',

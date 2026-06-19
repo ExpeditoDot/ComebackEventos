@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    
     public function up(): void
     {
         Schema::create('eventos', function (Blueprint $table) {
@@ -14,12 +13,9 @@ return new class extends Migration
             $table->string('nome');
             $table->string('local');
             $table->dateTime('data');
-            
-            // --- ADICIONE ESTAS 3 LINHAS NOVAS AQUI EMBAIXO ---
-            $table->decimal('preco_ingresso', 8, 2)->nullable(); // Guarda o preço (ex: 99.90)
-            $table->text('descricao')->nullable();               // Guarda textos longos da descrição
-            $table->string('image')->nullable();                 // Guarda o caminho da foto anexada
-            
+            $table->decimal('preco_ingresso', 10, 2)->nullable();
+            $table->text('descricao')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
