@@ -2,78 +2,142 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Evento;
-use App\Http\Requests\StoreEventoRequest;
-use App\Http\Requests\UpdateEventoRequest;
 use Illuminate\Http\Request;
+use App\Models\Evento; 
 use Illuminate\Support\Facades\Storage;
 
 class EventosController extends Controller
 {
-
+    /**
+     * 1. LISTAR (Read) - Exibe todos os eventos na Dashboard
+     */
     public function index()
     {
-        $evento = Evento::all();
-        return view('eventos.index', compact('evento'));
+        // Busca todos os registros da tabela de eventos no SQLite
+        $eventos = Evento::all(); 
+        
+        // Retorna a view principal do AdminLTE passando a lista de eventos
+        return view('dashboard', compact('eventos')); 
     }
 
+    /**
+     * 2. EXIBIR FORMULÁRIO DE CADASTRO
+     */
     public function create()
     {
-        return view('eventos.create');
+        // Retorna a view onde fica o formulário de cadastrar novo evento
+        return view('eventos.create'); 
     }
 
-    public function ListarEventos()
+    /**
+     * 3. SALVAR REGISTRO (Create) - Recebe os dados do formulário e grava no banco
+     */
+    public function store(Request $request)
     {
-        $eventos = Evento::all();
-        return view ('eventos.eventos', compact('eventos'));
-    }
-
-    public function TabelaEventos()
-    {
-        $eventos = Evento::paginate(4);
-        return view('eventos.tabela', compact('eventos'));
-    }
-
-  
-    public function store(StoreEventoRequest $request)
-    {
-        $path = $request->file('image')->store('eventos', 'public');
-
-        Evento::create([
-            'Nome' => $request->Nome,
-            'Local' => $request->Local,
-            'Data' => $request->Data,
-            'PrecoIngresso' => $request -> PrecoIngresso,
-            'image' => $path,
+        // Validação obrigatória dos campos conforme exigido nos critérios do trabalho
+        $request->validate([
+        'nome'            => 'required|min:3',
+        'local'           => 'required',
+        'data'            => 'required',
+        'preco_ingresso'  => 'nullable|numeric',
+        'descricao'       => 'nullable',
+        'image'           => 'nullable|image|max:2048', // Validação da imagem
+        ], [
+            // Mensagens personalizadas em português para a validação
+            'nome.required'  => 'O campo nome do evento é obrigatório.',
+            'nome.min'       => 'O nome do evento deve tener pelo menos 3 caracteres.',
+            'local.required' => 'O local do evento é obrigatório.',
+            'data.required'  => 'A data do evento é obrigatória.',
+            'preco_ingresso.numeric' => 'O preço deve ser um valor numérico válido.',
+            'image.image'    => 'O arquivo enviado deve ser uma imagem.',
+            'image.max'      => 'A imagem não pode ter mais que 2MB.',
         ]);
 
-        return redirect() ->route('eventos');
-    }
-    public function edit(Evento $evento)    
-    {
-        return view ('eventos.edit', compact('evento'));
-    }
-        public function update(UpdateEventoRequest $request, Evento $evento)
-    {
-        $evento-> update($request-> only(['Nome','Local','Data','PrecoIngresso', 'descricao']));
-        if ($request->hasFile('image')) {
-            if ($evento->image) {
-                storage::disk('public')->delete($evento->image);
-            }
-            $evento->image = $request->file('image')->store('eventos','public');
-        } else {
-            $evento->image = $evento->image;
+        $dados = $request->all();
+
+        // Lógica para fazer o Upload Seguro da Imagem
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Salva a imagem dentro de storage/app/public/eventos
+            $caminhoImagem = $request->file('image')->store('eventos', 'public');
+            $dados['image'] = $caminhoImagem;
         }
-        $evento->update(["image" => $evento->image]);
-        return redirect()->route('eventos');
+
+        // Grava as informações no banco de dados SQLite
+        Evento::create($dados);
+
+        // Redireciona de volta para a dashboard com uma mensagem de sucesso
+        return redirect()->route('dashboard')->with('success', 'Evento cadastrado com sucesso!');
     }
 
-    public function destroy(Evento $evento)
+    /**
+     * 4. EXIBIR FORMULÁRIO DE EDIÇÃO
+     */
+    public function edit($id)
     {
-        if ($evento->image) {
-            storage::disk('public')->delete($evento->image);
+        // Localiza o evento pelo ID ou dispara um erro 404 caso não exista
+        $evento = Evento::findOrFail($id); 
+        
+        // Abre a tela de edição preenchendo os campos com os dados desse evento
+        return view('eventos.edit', compact('evento')); 
+    }
+
+    /**
+     * 5. ATUALIZAR REGISTRO (Update) - Grava as alterações feitas no evento
+     */
+    public function update(Request $request, $id)
+    {
+        // Validação idêntica para garantir a consistência dos dados ao editar
+        $request->validate([
+            'nome'            => 'required|min:3',
+            'local'           => 'required',
+            'data'            => 'required',
+            'preco_ingresso'  => 'nullable|numeric',
+            'descricao'       => 'nullable',
+            'image'           => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'nome.required'  => 'O campo nome do evento é obrigatório.',
+            'nome.min'       => 'O nome do evento deve ter pelo menos 3 caracteres.',
+            'local.required' => 'O local do evento é obrigatório.',
+            'data.required'  => 'A data do evento é obrigatória.',
+            'preco_ingresso.numeric' => 'O preço deve ser um valor numérico válido.',
+            'image.image'    => 'O arquivo enviado deve ser uma imagem.',
+        ]);
+
+        $evento = Evento::findOrFail($id);
+        $dados = $request->all();
+
+        // Se enviou uma nova imagem na edição, substitui a antiga para economizar espaço
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            if ($evento->image) {
+                Storage::disk('public')->delete($evento->image); // Deleta a imagem velha
+            }
+            $caminhoImagem = $request->file('image')->store('eventos', 'public');
+            $dados['image'] = $caminhoImagem;
         }
+
+        // Atualiza os dados no banco
+        $evento->update($dados);
+
+        // Redireciona para o painel com mensagem de sucesso
+        return redirect()->route('dashboard')->with('success', 'Evento atualizado com sucesso!');
+    }
+
+    /**
+     * 6. EXCLUIR REGISTRO (Delete) - Remove o evento do banco de dados
+     */
+    public function destroy($id)
+    {
+        $evento = Evento::findOrFail($id);
+
+        // Se o evento possuir uma imagem salva, apaga ela também do servidor
+        if ($evento->image) {
+            Storage::disk('public')->delete($evento->image);
+        }
+
+        // Deleta do SQLite
         $evento->delete();
-        return redirect()->route('eventos');
+
+        // Redireciona de volta informando a exclusão
+        return redirect()->route('dashboard')->with('success', 'Evento removido com sucesso!');
     }
 }
