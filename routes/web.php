@@ -13,13 +13,19 @@ Route::get('/', function () {
 // 2. GRUPO DE ROTAS PROTEGIDAS (Só acessa quem clicar em Logar e colocar a senha)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // Dashboard do AdminLTE com a lista de eventos
+    // Dashboard real com dados de resumo
     Route::get('/dashboard', [EventosController::class, 'index'])->name('dashboard');
     Route::get('/admin/dashboard', [EventosController::class, 'index']);
 
+    // Nova Rota para ver os Cards de Cinema
+    Route::get('/eventos-cards', [EventosController::class, 'listagemCards'])->name('eventos.cards');
+
     Route::get('/eventos-tabela', [EventosController::class, 'tabela'])->name('eventos.tabela');
+    Route::get('/eventos/{id}/visualizar', [EventosController::class, 'show'])->name('eventos.show');
+    
+    
     // Todas as rotas do CRUD de Eventos
-    Route::resource('eventos', EventosController::class);
+    Route::resource('eventos', EventosController::class)->except(['index']);
 
     // Rotas de perfil do Laravel Breeze
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

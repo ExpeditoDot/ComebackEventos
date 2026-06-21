@@ -30,17 +30,21 @@
         <div class="row">
             
             @forelse ($eventos as $evento)
-            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-4"></div>
-                    <div class="cinema-card">
+                {{-- Div da coluna corrigida: ela envolve TODO o card agora --}}
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="cinema-card position-relative">
                         
-                         <div class="cinema-poster-wrapper">
+                        {{-- Esse link invisível estica por todo o card para permitir a visualização --}}
+                        <a href="{{ route('eventos.show', $evento->id) }}" class="stretched-link" style="z-index: 1;"></a>
+
+                        <div class="cinema-poster-wrapper">
                             @if($evento->image)
                                 <img src="{{ asset('storage/' . $evento->image) }}" class="cinema-poster" alt="Cartaz do Evento">
                             @else
                                 <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop" class="cinema-poster" alt="Cartaz Padrão">
                             @endif
 
-                            <div class="cinema-badge">
+                            <div class="cinema-badge" style="z-index: 3;">
                                 @if($evento->PrecoIngresso)
                                     R$ {{ number_format($evento->PrecoIngresso, 2, ',', '.') }}
                                 @else
@@ -48,7 +52,8 @@
                                 @endif
                             </div>
 
-                             <div class="cinema-actions">
+                            {{-- Colocamos z-index: 3 e position relative para os botões funcionarem por cima do card --}}
+                            <div class="cinema-actions" style="z-index: 3; position: relative;">
                                 <a href="{{ route('eventos.edit', $evento->id) }}" class="btn btn-xs btn-light mr-1" title="Editar">
                                     <i class="fas fa-edit text-dark"></i>
                                 </a>
@@ -62,7 +67,7 @@
                             </div>
                         </div>
                         
-                            <div class="cinema-card-body mt-2">
+                        <div class="cinema-card-body mt-2">
                             <h5 class="cinema-title text-white font-weight-bold text-truncate mb-1" title="{{ $evento->Nome }}">
                                 {{ $evento->Nome }}
                             </h5>
@@ -75,7 +80,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div> {{-- Fechamento correto da coluna --}}
             @empty
                 <div class="col-12 text-center py-5">
                     <p class="text-muted"><i class="fas fa-calendar-times fa-3x mb-3 d-block"></i> Nenhum evento cadastrado no momento.</p>
@@ -84,7 +89,6 @@
 
         </div>
 
-       
         <div class="d-flex justify-content-center mt-4 bg-dark p-2 rounded">
             {{ $eventos->links('pagination::bootstrap-4') }}
         </div>

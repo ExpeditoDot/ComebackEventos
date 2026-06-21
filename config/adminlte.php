@@ -214,12 +214,12 @@ return [
         ],
         [
             'text' => 'Visualizar em Cards',
-            'route'  => 'eventos.index', 
+            'url'  => 'eventos-cards', 
             'icon' => 'fas fa-fw fa-th-large', 
         ],
         [
             'text' => 'Métricas (Tabela)',
-            'route'  => 'eventos.tabela',
+            'url'  => 'eventos-tabela',
             'icon' => 'fas fa-fw fa-table', 
             'label' => 'Novo', 
             'label_color' => 'danger', 

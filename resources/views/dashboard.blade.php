@@ -1,91 +1,78 @@
 @extends('adminlte::page')
 
-@section('title', 'Painel de Eventos')
+@section('title', 'Dashboard - Comeback Eventos')
 
 @section('content_header')
-    <div class="d-flex justify-content-between align-items-center">
-        <h1><i class="fas fa-calendar-alt text-danger"></i> Painel União Festas</h1>
-        <a href="{{ route('eventos.create') }}" class="btn btn-danger font-weight-bold" style="background-color: #ff4444; border-color: #ff4444;">
-            <i class="fas fa-plus-circle"></i> Novo Evento
-        </a>
-    </div>
-@stop
+    <h1 class="text-white font-weight-bold">Dashboard Inicial</h1>
+@endsection
 
 @section('content')
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="icon fas fa-check-circle"></i> {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <div class="container-fluid">
+        
+        {{-- Linha de Cartões de Indicadores (Widgets) --}}
+        <div class="row">
+            
+            {{-- Indicador 1: Total de Eventos --}}
+            <div class="col-lg-4 col-6">
+                <div class="small-box bg-info shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                    <div class="inner p-4">
+                        <h3 class="font-weight-bold">{{ $totalEventos }}</h3>
+                        <p class="text-uppercase tracking-wide font-weight-bold text-sm m-0">Total de Eventos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <a href="{{ route('eventos.cards') }}" class="small-box-footer py-2">
+                        Ver Cartazes <i class="fas fa-arrow-circle-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Indicador 2: Eventos Pagos --}}
+            <div class="col-lg-4 col-6">
+                <div class="small-box bg-danger shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                    <div class="inner p-4">
+                        <h3 class="font-weight-bold">{{ $totalPagos }}</h3>
+                        <p class="text-uppercase tracking-wide font-weight-bold text-sm m-0">Eventos com Bilheteria</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <a href="{{ route('eventos.tabela') }}" class="small-box-footer py-2">
+                        Ver Tabela de Métricas <i class="fas fa-arrow-circle-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            {{-- Indicador 3: Eventos Gratuitos --}}
+            <div class="col-lg-4 col-12">
+                <div class="small-box bg-success shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                    <div class="inner p-4">
+                        <h3 class="font-weight-bold">{{ $totalGratuitos }}</h3>
+                        <p class="text-uppercase tracking-wide font-weight-bold text-sm m-0">Eventos Gratuitos</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-laugh-beam"></i>
+                    </div>
+                    <a href="{{ route('eventos.cards') }}" class="small-box-footer py-2">
+                        Ver Todos <i class="fas fa-arrow-circle-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
         </div>
-    @endif
 
-    <div class="card card-danger card-outline">
-        <div class="card-body bg-dark text-white p-0">
-            <div class="table-responsive">
-                <table class="table table-dark table-striped table-hover m-0">
-                    <thead>
-                        <tr class="text-danger">
-                            <th>ID</th>
-                            <th>Imagem</th>
-                            <th>Nome do Evento</th>
-                            <th>Local</th>
-                            <th>Data/Hora</th>
-                            <th>Preço</th>
-                            <th>Descrição</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($eventos as $evento)
-                            <tr>
-                                <td>{{ $evento->id }}</td>
-                                <td>
-                                    @if($evento->image)
-                                        <img src="{{ asset('storage/' . $evento->image) }}" alt="Banner" class="img-thumbnail" style="max-height: 50px; background-color: #333; border-color: #555;">
-                                    @else
-                                        <span class="badge badge-secondary">Sem Foto</span>
-                                    @endif
-                                </td>
-                                <td class="font-weight-bold">{{ $evento->nome }}</td>
-                                <td>{{ $evento->local }}</td>
-                                <td>{{ date('d/m/Y H:i', strtotime($evento->data)) }}</td>
-                                <td>
-                                    @if($evento->preco_ingresso)
-                                        R$ {{ number_format($evento->preco_ingresso, 2, ',', '.') }}
-                                    @else
-                                        <span class="text-success">Gratuito</span>
-                                    @endif
-                                </td>
-                                <td><small>{{ Str::limit($evento->descricao, 40) }}</small></td>
-                                <td class="text-center">
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{{ route('eventos.edit', $evento->id) }}" class="btn btn-info mr-1" title="Editar">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-
-                                        <form action="{{ route('eventos.destroy', $evento->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover este evento?');" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" title="Excluir">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">
-                                    <i class="fas fa-calendar-times fa-2x d-block mb-2"></i>
-                                    Nenhum evento solicitado ou cadastrado no sistema.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        {{-- Bloco de Boas-Vindas --}}
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card bg-neutral-900 border-secondary text-white" style="background: #121212; border: 1px solid #222; border-radius: 12px;">
+                    <div class="card-body p-4 text-center">
+                        <h4 class="font-weight-bold text-danger">Bem-vindo ao Sistema Administrativo da Comeback Eventos</h4>
+                        <p class="text-muted m-0 mt-2">Utilize o menu lateral para gerenciar as atrações, visualizar métricas consolidadas ou emitir novos registros.</p>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
-@stop
+@endsection
